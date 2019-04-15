@@ -11,6 +11,10 @@ EOF
   exit 1
 }
 
+echo "CLOUDSDK_COMPUTE_REGION: \"$CLOUDSDK_COMPUTE_REGION\""
+echo "CLOUDSDK_COMPUTE_ZONE: \"$CLOUDSDK_COMPUTE_ZONE\""
+echo "CLOUDSDK_CONTAINER_CLUSTER: \"$CLOUDSDK_CONTAINER_CLUSTER\""
+
 # If there is no kubectl context, use gcloud to get one, otherwise we can
 # assume the user hase configured the context with some kubectl related env
 # var.
@@ -19,6 +23,10 @@ if [[ $(kubectl config current-context 2> /dev/null) == "" ]]; then
   region=${CLOUDSDK_COMPUTE_REGION:-$(gcloud config get-value compute/region 2> /dev/null)}
   zone=$(gcloud config get-value compute/zone 2> /dev/null)
   project=$(gcloud config get-value core/project 2> /dev/null)
+  
+  echo "cluster: \"$cluster\""
+  echo "region: \"$region\""
+  echo "zone: \"$zone\""
 
   [[ -z "$cluster" ]] && var_usage
   [ ! "$zone" -o "$region" ] && var_usage
